@@ -26,10 +26,6 @@ export interface ServerResponse<T> {
   items: T[];
 }
 
-
-
-
-
 export interface IOwner {
   login: string;
   id: number;
