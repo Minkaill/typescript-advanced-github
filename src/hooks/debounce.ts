@@ -1,6 +1,6 @@
 import  React  from 'react';
 
-export function useDebounce(value: string, delay = 300): string {
+export function useDebounced(value: string, delay = 300): string {
     const [debounced, setDebounced] = React.useState(value)
 
     React.useEffect(() => {

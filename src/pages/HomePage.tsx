@@ -1,15 +1,19 @@
 import React from "react";
 import { useSearchUsersQuery } from "../store/github/github.api";
+import { useDebounced } from "../hooks/debounce";
 
 const HomePage = () => {
-  const { isError, isLoading, data } = useSearchUsersQuery("Minkail");
-  const [search, setSearch] = React.useState("")
-
+  const [search, setSearch] = React.useState("");
+  const debounced = useDebounced(search);
+  const [dropDown, setDropDown] = React.useState(false);
+  const { isError, isLoading, data } = useSearchUsersQuery(debounced, {
+    skip: debounced.length < 3,
+  });
 
   React.useEffect(() => {
-    
-  }, [search])
-
+    console.log(debounced);
+    setDropDown(debounced.length > 3 && data?.length! > 0);
+  }, [debounced, data]);
 
   return (
     <div className="flex justify-center pt-10 mx-auto h-screen w-screen">
@@ -23,12 +27,21 @@ const HomePage = () => {
           placeholder="Search for github Username..."
           onChange={(e) => setSearch(e.target.value)}
         />
-        <div className="absolute top-[42px] left-0 right-0 max-h-[200px] shadow-md bg-white">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
-          totam aliquam provident natus deleniti maiores vel ipsam earum
-          cupiditate nostrum consequuntur ad recusandae laboriosam excepturi
-          officiis, quia expedita quod eum?
-        </div>
+        {dropDown && (
+          <ul className="absolute top-[42px] left-0 right-0 max-h-[200px] shadow-md overflow-scroll bg-white">
+            {isLoading && <p className="text-center">Loading...</p>}
+            {data?.map((users) => {
+              return (
+                <li
+                  key={users.id}
+                  className="py-2 px-4 cursor-pointer hover:bg-gray-500 hover:text-white transition-colors"
+                >
+                  {users.login}
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
     </div>
   );
