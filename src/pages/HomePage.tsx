@@ -25,7 +25,7 @@ const HomePage = () => {
 
   const clickHandler = (username: string) => {
     fetchRepos(username);
-    setDropDown(false)
+    setDropDown(false);
   };
 
   return (
@@ -45,13 +45,16 @@ const HomePage = () => {
             {isLoading && <p className="text-center">Loading...</p>}
             {data?.map((users) => {
               return (
-                <li
-                  key={users.id}
-                  onClick={() => clickHandler(users.login)}
-                  className="py-2 px-4 cursor-pointer hover:bg-gray-500 hover:text-white transition-colors"
-                >
-                  {users.login}
-                </li>
+                <div className="flex mb-5 w-full ">
+                  <img src={users.avatar_url} width={50} height={50} alt="" />
+                  <li
+                    key={users.id}
+                    onClick={() => clickHandler(users.login)}
+                    className="py-2 px-4 w-full cursor-pointer hover:bg-gray-500 hover:text-white transition-colors"
+                  >
+                    {users.login}
+                  </li>
+                </div>
               );
             })}
           </ul>
@@ -60,7 +63,9 @@ const HomePage = () => {
           {areReposLoading && (
             <p className="text-center">Repos are Loading...</p>
           )}
-          {repos?.map(repo => <RepoCard repo={repo} key={repo.id} />)}
+          {repos?.map((repo) => (
+            <RepoCard repo={repo} key={repo.id} />
+          ))}
         </div>
       </div>
     </div>
